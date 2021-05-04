@@ -2,8 +2,10 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 
-
-require('dotenv').config();
+//set up environment variables
+const env = require('./utils/env');
+env.setEnv();
+console.log("Server started");
 
 //connect to database and register schemas
 require('./models');

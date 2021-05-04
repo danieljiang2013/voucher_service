@@ -6,13 +6,75 @@ const userModel = mongoose.model("users");
 
 const { generateToken, authenticateToken } = require("../utils/jwtTokens");
 
+
+
+// login and return an authorization token
+const login = (req, res) => {
+
+    //check that email and password are present
+    if (!req.body.email || !req.body.password) {
+        res.status(400);
+        res.send("Login failed, missing email or password");
+        return;
+    }
+
+    //callback on validate password, this function gets called after comparing passwords
+    const validatePassword = (err, valid) => {
+        if (err) {
+            res.status(500);
+            res.send("Login failed, something went wrong");
+        }
+        // login successful
+        if (valid) {
+            const payload = {
+                id: user._id,
+            };
+
+            console.log("Login successful");
+            res.status(200);
+
+            // generate and send an authorization token
+            res.send({ token: generateToken(payload) })
+        }
+        // login failed
+        else {
+            console.log("Login failed, wrong password");
+
+            res.status(400);
+            res.send("Login failed - wrong password");
+        }
+
+    };
+
+    // callback function to validate account after finding a user from the database
+    const validateAccount = (err, docs) => {
+        console.log(docs);
+        if (docs.length === 0) {
+            res.status(400);
+            res.send("Login failed, no account exists with that email");
+            return;
+        }
+        if (err) {
+            console.log("Login failed, something went wrong");
+            res.send("Login failed, something went wrong");
+            return;
+        }
+
+        user = docs[0];
+        bcrypt.compare(req.body.password, user.password, validatePassword);
+
+    };
+
+    userModel.find({ email: req.body.email }, validateAccount);
+
+
+}
+
+
 // add a new user to the database
 
 const addUser = (req, res) => {
-
-
     //check that required fields are present
-    console.log("adding user");
     if (
         !req.body.email ||
         !req.body.password ||
@@ -71,4 +133,6 @@ const addUser = (req, res) => {
 
     });
 }
+
+module.exports.login = login;
 module.exports.addUser = addUser;
