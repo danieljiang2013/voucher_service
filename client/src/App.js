@@ -4,7 +4,7 @@ import './App.css';
 import { Grid } from '@material-ui/core'
 import Axios from 'axios';
 import LoginForm from './components/Login/LoginForm';
-
+import Home from './components/Home/Home'
 
 function App() {
 
@@ -82,6 +82,9 @@ function App() {
 
     <Router>
 
+      <Route path="/">
+        <Home />
+      </Route>
       <Route path="/login">
         <LoginForm storeToken={storeToken}></LoginForm>
       </Route>
