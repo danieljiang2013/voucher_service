@@ -83,7 +83,8 @@ function App() {
     <Router>
 
       <Route path="/">
-        <Home />
+        {/* <Home /> */}
+        <LoginForm storeToken={storeToken}></LoginForm>
       </Route>
       <Route path="/login">
         <LoginForm storeToken={storeToken}></LoginForm>
