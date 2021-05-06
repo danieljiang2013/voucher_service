@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const c = require("config");
 const emailValidator = require("email-validator");
 const mongoose = require("mongoose");
 
@@ -6,6 +7,29 @@ const userModel = mongoose.model("users");
 
 const { generateToken, authenticateToken } = require("../utils/jwtTokens");
 
+
+const getUser = (req, res) => {
+
+    //id is the user's email 
+    const { id } = req.user;
+
+    userModel.findById(id)
+        .lean()
+        .then((doc) => {
+
+            console.log(doc)
+            res.status(200);
+            res.send(doc);
+
+        })
+        .catch((err) => {
+
+            res.status(500);
+            res.send("Could not find user :(");
+        })
+
+
+}
 
 
 // login and return an authorization token
@@ -71,6 +95,15 @@ const login = (req, res) => {
 }
 
 
+//adding biller information
+const addBillerInfo = (req, res) => {
+
+
+
+}
+
+
+
 // add a new user to the database
 
 const addUser = (req, res) => {
@@ -134,5 +167,6 @@ const addUser = (req, res) => {
     });
 }
 
+module.exports.getUser = getUser;
 module.exports.login = login;
 module.exports.addUser = addUser;

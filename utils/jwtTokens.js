@@ -7,7 +7,6 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config({ path: "../
 const SECRET = process.env.SECRET
 
 const generateToken = (payload) => {
-    console.log("secret:", SECRET);
     return jwt.sign(payload, SECRET, { expiresIn: '60m' })
 };
 
