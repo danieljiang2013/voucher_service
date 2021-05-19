@@ -3,6 +3,8 @@ import { Redirect, withRouter } from 'react-router-dom';
 
 import Axios from 'axios';
 import PropTypes from 'prop-types'
+import NavBar from '../Home/Navbar'
+
 
 import {
     Card,
@@ -42,53 +44,55 @@ function BillerInfoForm({ token, user }) {
     }
 
     return (
+        <div>
+            <NavBar />
+            <Card>
+                <CardContent>
+                    <Typography variant="h6">
+                        Update Biller Information
+                    </Typography>
 
-        <Card>
-            <CardContent>
-                <Typography variant="h6">
-                    Update Biller Information
-                </Typography>
+                    <form>
+                        <TextField
+                            id="firstName"
+                            type="firstName"
+                            label="FirstName"
+                            value={billerFirstName}
+                            onChange={onfirstNameChange}
+                        >
+                        </TextField>
+                        <TextField
+                            id="lastName"
+                            type="lastName"
+                            label="LasttName"
+                            value={billerLastName}
+                            onChange={onLastNameChange}
+                        >
+                        </TextField>
+                        <TextField
+                            id="email"
+                            type="email"
+                            label="Email"
+                            value={billerEmail}
+                            onChange={onEmailChange}
 
-                <form>
-                    <TextField
-                        id="firstName"
-                        type="firstName"
-                        label="FirstName"
-                        value={billerFirstName}
-                        onChange={onfirstNameChange}
-                    >
-                    </TextField>
-                    <TextField
-                        id="lastName"
-                        type="lastName"
-                        label="LasttName"
-                        value={billerLastName}
-                        onChange={onLastNameChange}
-                    >
-                    </TextField>
-                    <TextField
-                        id="email"
-                        type="email"
-                        label="Email"
-                        value={billerEmail}
-                        onChange={onEmailChange}
-
-                    >
-                    </TextField>
-                </form>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={onSubmit}>
-                    Update
-                    </Button>
+                        >
+                        </TextField>
+                    </form>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={onSubmit}>
+                        Update
+                        </Button>
 
 
 
 
-            </CardContent>
+                </CardContent>
 
-        </Card>
+            </Card>
+        </div>
     )
 
 

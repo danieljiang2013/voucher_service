@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core'
 import Axios from 'axios';
 import LoginForm from './components/Login/LoginForm';
 import Home from './components/Home/Home';
+import CreateAccount from './components/Signup/CreateAccount'
 import BillerInfoForm from './components/UpdateInfo/BillerInfoForm';
 
 function App() {
@@ -88,16 +89,14 @@ function App() {
 
     <Router>
 
-      <Route path="/">
-        {/* <Home /> */}
-        {/* <LoginForm storeToken={storeToken}></LoginForm> */}
-
+      <Route exact path="/">
+        <Home />
       </Route>
       <Route path="/login">
         <LoginForm storeToken={storeToken}></LoginForm>
       </Route>
 
-      <Route path="/signup"></Route>
+      <Route path="/signup"><CreateAccount /></Route>
 
       <Route path="/billerInfo">
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
+import NavBar from '../Home/Navbar';
 
 import Axios from 'axios';
 import PropTypes from 'prop-types'
@@ -43,46 +44,50 @@ function LoginForm({ storeToken }) {
 
 
     return (
+        <div>
+            <NavBar />
 
-        <Card>
-            <CardContent>
-                <Typography variant="h6">
-                    Login
+            <Card>
+                <CardContent>
+                    <Typography variant="h6">
+                        Login
                 </Typography>
-                <form>
+                    <form>
 
-                    <TextField
-                        id="email"
-                        type="email"
-                        label="Email"
-                        variant="outlined"
-                        value={email}
-                        onChange={onEmailChange}
-                    >
-                    </TextField>
+                        <TextField
+                            id="email"
+                            type="email"
+                            label="Email"
+                            variant="outlined"
+                            value={email}
+                            onChange={onEmailChange}
+                        >
+                        </TextField>
 
-                    <TextField
-                        id="password"
-                        type="password"
-                        label="Password"
-                        variant="outlined"
-                        value={password}
-                        onChange={onPasswordChange}
-                    >
+                        <TextField
+                            id="password"
+                            type="password"
+                            label="Password"
+                            variant="outlined"
+                            value={password}
+                            onChange={onPasswordChange}
+                        >
 
-                    </TextField>
+                        </TextField>
 
-                </form>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={onLogin}>
-                    Login
+                    </form>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={onLogin}>
+                        Login
                 </Button>
 
-            </CardContent>
+                </CardContent>
 
-        </Card>
+            </Card>
+
+        </div>
 
 
 
