@@ -172,7 +172,7 @@ const addUser = (req, res) => {
     }
 
     const newUser = {
-        firstName: req.body.email,
+        firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
@@ -212,7 +212,115 @@ const addUser = (req, res) => {
     });
 }
 
+const editUser = (req, res) => {
+    
+    //check that email and password are present
+    if (!req.body.email || !req.body.oldpassword || !req.body.newpassword) {
+        res.status(400);
+        res.send("Change Personal Information failed, missing email or password");
+        
+        return;
+    }
+
+    //callback on validate password, this function gets called after comparing passwords
+    const validatePassword = (err, valid) => {
+        if (err) {
+            res.status(500);
+            res.send("Change Personal Information failed, something went wrong");
+        }
+        // login successful
+        if (valid) {
+            
+
+            console.log("Password match successful");
+
+            res.status(200);
+            
+            if (
+                !req.body.email ||
+                !req.body.oldpassword ||
+                !req.body.firstName ||
+                !req.body.lastName ||
+                !req.body.phoneNumber ||
+                !req.body.newpassword
+            ) {
+                res.status(400);
+                res.send("Change Personal Information failed, missing fields");
+                console.log("yes")
+                return;
+            }
+        
+            //check that password is long enough
+            if (req.body.newpassword.length < 8) {
+                res.send("password too short");
+                return;
+            }
+        
+            const newUser = {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phoneNumber: req.body.phoneNumber,
+                
+            }
+
+            //hash the password with 10 salt rounds and add the new user to the database
+            bcrypt.hash(req.body.newpassword, 10, (err, hash) => {
+        
+                newUser.password = hash;
+        
+                userModel.updateOne({ email: req.body.email }, newUser, (err, result) => {
+                    if (err) {
+                        console.log("Personal Information was not updated successfully");
+                        console.error(err);
+                    }})
+                        var newid = newUser._id;
+                        const payload = {
+                            id: newid,
+                        };
+                        res.send({ token: generateToken(payload) });
+
+        
+        
+            });
+            // generate and send an authorization token
+            
+        }
+        // login failed
+        else {
+            console.log("Change Personal Information failed failed, wrong password");
+            res.status(400);
+            res.send("Change Personal Information failed failed - wrong password");
+        }
+
+    };
+
+    // callback function to validate account after finding a user from the database
+    const validateAccount = (err, docs) => {
+        console.log(docs);
+        if (docs.length === 0) {
+            res.status(400);
+            res.send("Change Personal Information failed failed, no account exists with that email");
+            console.log("yes")
+            return;
+        }
+        if (err) {
+            console.log("Change Personal Information failed failed, something went wrong");
+            res.send("Change Personal Information failed failed, something went wrong");
+            return;
+        }
+
+        user = docs[0];
+        bcrypt.compare(req.body.oldpassword, user.password, validatePassword);
+
+    };
+
+    userModel.find({ email: req.body.email }, validateAccount);
+
+
+}
+
 module.exports.getUser = getUser;
 module.exports.login = login;
 module.exports.addUser = addUser;
 module.exports.updateBillerInfo = updateBillerInfo;
+module.exports.editUser = editUser;
