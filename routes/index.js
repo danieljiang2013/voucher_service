@@ -13,7 +13,6 @@ router.get('/', (req, res) => {
 router.use('/user', userRoute);
 
 
-
 // catch 404 and forward to error handler
 router.use("/", (req, res, next) => {
     const err = new Error('Not Found');

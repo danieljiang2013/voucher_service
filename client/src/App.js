@@ -4,7 +4,8 @@ import './App.css';
 import { Grid } from '@material-ui/core'
 import Axios from 'axios';
 import LoginForm from './components/Login/LoginForm';
-import Home from './components/Home/Home'
+import Home from './components/Home/Home';
+import BillerInfoForm from './components/UpdateInfo/BillerInfoForm';
 
 function App() {
 
@@ -49,33 +50,38 @@ function App() {
 
   });
 
-
-  //called after rendering
   useEffect(() => {
-
+    console.log("useffect:");
     //if not logged in
     if (token === '') {
+      console.log("not logged in")
       logout();
+      setUser({})
     }
 
-    //retrieve user and set in state
+    // otherwise retrieve user and set in state
     else {
-      console.log("user is logged in");
       Axios.get('api/user/get', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
         .then((res) => {
-          console.log(res.data);
-
-          //store user in state
+          const userString = JSON.stringify(res.data);
+          console.log("logged in user:", localStorage.getItem('user'))
+          if (userString !== JSON.stringify(localStorage.getItem('user'))) {
+            localStorage.setItem('user', userString)
+            setUser(res.data)
+            console.log("set new user:", user);
+          }
         })
-
-
+        .catch(() => {
+          logout();
+        })
     }
 
-  });
+  }, [token]);
+
 
 
   return (
@@ -84,13 +90,19 @@ function App() {
 
       <Route path="/">
         {/* <Home /> */}
-        <LoginForm storeToken={storeToken}></LoginForm>
+        {/* <LoginForm storeToken={storeToken}></LoginForm> */}
+
       </Route>
       <Route path="/login">
         <LoginForm storeToken={storeToken}></LoginForm>
       </Route>
 
       <Route path="/signup"></Route>
+
+      <Route path="/billerInfo">
+
+        <BillerInfoForm user={user} token={token}></BillerInfoForm>
+      </Route>
 
     </Router>
 

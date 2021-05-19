@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const c = require("config");
 const emailValidator = require("email-validator");
+const { response } = require("express");
 const mongoose = require("mongoose");
 
 const userModel = mongoose.model("users");
@@ -95,13 +96,57 @@ const login = (req, res) => {
 }
 
 
-//adding biller information
-const addBillerInfo = (req, res) => {
+//adding and/or updating biller information
+const updateBillerInfo = (req, res) => {
+
+    if (
+        !req.body.billerFirstName ||
+        !req.body.billerLastName ||
+        !req.body.billerEmail
+
+    ) {
+        res.status(400);
+        res.send("Failed to add biller info, missing fields");
+        return;
+    }
+    const billerInfo = {
+        billerFirstName: req.body.billerFirstName,
+        billerLastName: req.body.billerLastName,
+        billerEmail: req.body.billerEmail
+    }
+    console.log("id=", req.body);
+    const id = req.body.id;
+
+    userModel.findById(id).lean().then((user) => {
+
+        if (!user) {
+            console.log("Update biller info failed, can't find user");
+            res.send("failed to find user");
+        }
+        else {
+            userModel.updateOne({ _id: id }, billerInfo, (err, result) => {
+                if (err) {
+                    console.log("User was not updated successfully");
+                    console.error(err);
+                }
+                else {
+                    if (result.n === 1) {
+                        console.log("User was updated successfully");
+                        res.send("User updated successfully");
+                    } else {
+                        console.log("User was not updated successfully: Cannot find user");
+                        res.send("Cannot Find User");
+                    }
+                }
+            })
+
+        }
+
+    })
 
 
 
 }
-
 
 
 // add a new user to the database
@@ -170,3 +215,4 @@ const addUser = (req, res) => {
 module.exports.getUser = getUser;
 module.exports.login = login;
 module.exports.addUser = addUser;
+module.exports.updateBillerInfo = updateBillerInfo;

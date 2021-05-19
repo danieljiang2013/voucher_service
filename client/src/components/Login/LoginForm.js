@@ -30,10 +30,8 @@ function LoginForm({ storeToken }) {
     const onLogin = () => {
         const payload = { email, password };
 
-        console.log("payload:", payload);
         Axios.post('api/user/login', payload)
             .then((res) => {
-                console.log("resdata", res.data);
                 storeToken.call(this, res.data.token);
 
             })

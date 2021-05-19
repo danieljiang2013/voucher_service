@@ -19,12 +19,13 @@ router.get('/get', authenticateToken, (req, res) => {
 });
 
 
+//adds biller info if not existing, otherwise updates it with new info
+router.post("/updateBillerInfo", (req, res) => {
 
-router.post("/addBiller", (req, res) => {
-    userController.addBillerInfo(req, res);
+    userController.updateBillerInfo(req, res);
 });
 
-//TODO: update biller and update personal
 
+//TODO: update biller and update personal
 
 module.exports = router;

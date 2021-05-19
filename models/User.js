@@ -20,6 +20,9 @@ const userSchema = new Schema(
         lastName: { type: String, required: true, maxLength: 40 },
         phoneNumber: { type: String, required: true },
         password: { type: String, required: true },
+        billerFirstName: { type: String, required: false },
+        billerLastName: { type: String, required: false },
+        billerEmail: { type: String, required: false },
     }
 );
 
