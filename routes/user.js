@@ -18,6 +18,10 @@ router.get('/get', authenticateToken, (req, res) => {
     userController.getUser(req, res);
 });
 
+//update personal
+router.post('/edituser', (req, res) => {
+    userController.editUser(req, res);
+});
 
 //adds biller info if not existing, otherwise updates it with new info
 router.post("/updateBillerInfo", (req, res) => {

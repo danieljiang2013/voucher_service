@@ -48,20 +48,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp({storeToken}) {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+
+
+
+export default function PersonalInfoForm({ token, user, storeToken}) {
+    
+    const [oldpassword, setoldPassword] = useState('');
+    const [newpassword, setnewPassword] = useState('');
     const [fname, setfname] = useState('');
     const [lname, setlname] = useState('');
     const [phone, setphone] = useState('');
 
-    const onEmailChange = (e) => {
-        setEmail(e.target.value);
+
+    const onoldPasswordChange = (e) => {
+        setoldPassword(e.target.value);
     }
 
-    const onPasswordChange = (e) => {
-        setPassword(e.target.value);
+    const onnewPasswordChange = (e) => {
+        setnewPassword(e.target.value);
     }
 
 
@@ -76,18 +81,19 @@ export default function SignUp({storeToken}) {
     const onphoneChange = (e) => {
         setphone(e.target.value);
     }
-    const handleClick= () => {
-        axios.post('http://localhost:8000/api/user/signup',{email:email, password:password,firstName:fname,lastName:lname,phoneNumber:phone})
-             .then(function(response){
-              storeToken.call(this, response.data.token);
-              console.log(response);
-             })
-             .catch(function(error){
-              console.log(error);
-             })
-      }
-  const classes = useStyles();
 
+  const handleClick= () => {
+    axios.post('http://localhost:8000/api/user/edituser',{email:user.email, oldpassword:oldpassword,newpassword:newpassword,firstName:fname,lastName:lname,phoneNumber:phone})
+       .then((res) => {
+        storeToken.call(this, res.data.token);}
+        )
+       .catch(function(error){
+        console.log(error);
+       })
+  }
+
+  const classes = useStyles();
+    
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -97,11 +103,12 @@ export default function SignUp({storeToken}) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Personal Information
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
+                First Name
               <TextField
                 autoComplete="fname"
                 name="firstName"
@@ -109,64 +116,63 @@ export default function SignUp({storeToken}) {
                 required
                 fullWidth
                 id="firstName"
-                label="First Name"
+                label={user.firstName}
                 autoFocus
                 onChange={onfnameChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
+            Last Name
               <TextField
                 variant="outlined"
                 required
                 fullWidth
                 id="lastName"
-                label="Last Name"
+                label={user.lastName}
                 name="lastName"
                 autoComplete="lname"
                 onChange={onlnameChange}
               />
             </Grid>
             <Grid item xs={12}>
+                Old Password
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={onEmailChange}
+                name="oldpassword"
+                label=""
+                type="password"
+                id="oldpassword"
+                autoComplete="old-password"
+                onChange={onoldPasswordChange}
               />
             </Grid>
             <Grid item xs={12}>
+                New Password
               <TextField
                 variant="outlined"
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label=""
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                onChange={onPasswordChange}
+                onChange={onnewPasswordChange}
               />
             </Grid>
             <Grid item xs={12}>
+                Phone Number
               <TextField
                 variant="outlined"
                 required
                 fullWidth
                 name="phone"
-                label="Phone Number"
+                label={user.phoneNumber}
                 type="phone"
                 id="phone"
                 onChange={onphoneChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>
           </Grid>
@@ -178,15 +184,8 @@ export default function SignUp({storeToken}) {
             className={classes.submit}
             onClick={handleClick}
           >
-            Sign Up
+            Change
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Box mt={5}>

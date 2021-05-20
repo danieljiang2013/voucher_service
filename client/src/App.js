@@ -7,7 +7,7 @@ import LoginForm from './components/Login/LoginForm';
 import Home from './components/Home/Home';
 import CreateAccount from './components/Signup/CreateAccount'
 import BillerInfoForm from './components/UpdateInfo/BillerInfoForm';
-
+import PersonalInfoForm from './components/UpdatePersonalInfo/PersonalInfoForm';
 function App() {
 
   const [token, setToken] = useState(() => {
@@ -96,11 +96,19 @@ function App() {
         <LoginForm storeToken={storeToken}></LoginForm>
       </Route>
 
-      <Route path="/signup"><CreateAccount /></Route>
+      <Route path="/signup">
+        
+        <CreateAccount storeToken={storeToken}></CreateAccount>
+      </Route>
 
       <Route path="/billerInfo">
 
         <BillerInfoForm user={user} token={token}></BillerInfoForm>
+      </Route>
+
+      <Route path="/PersonalInfo">
+
+        <PersonalInfoForm  token={token} user={user} storeToken={storeToken}></PersonalInfoForm>
       </Route>
 
     </Router>
