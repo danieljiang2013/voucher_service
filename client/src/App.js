@@ -96,26 +96,20 @@ function App() {
         <LoginForm storeToken={storeToken}></LoginForm>
       </Route>
 
-      <Route path="/signup">
-        
-        <CreateAccount storeToken={storeToken}></CreateAccount>
-      </Route>
+      <Route path="/signup"><CreateAccount></CreateAccount></Route>
 
       <Route path="/billerInfo">
 
         <BillerInfoForm user={user} token={token}></BillerInfoForm>
       </Route>
 
-      <Route path="/PersonalInfo">
+      <Route path="/personalInfo">
 
-        <PersonalInfoForm  token={token} user={user} storeToken={storeToken}></PersonalInfoForm>
+        <PersonalInfoForm user={user} token={token}></PersonalInfoForm>
       </Route>
 
     </Router>
-
-
-  );
-
-}
+  )
+};
 
 export default App;
