@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const createData = (name, lastName, email, password, phone) => ({
-    id: name.replace(" ", "_"),
+    // id: name.replace(" ", "_"),
     name,
     lastName,
     email,
@@ -85,9 +85,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
 
 function BillerInfoForm({ token, user }) {
 
-    const [billerFirstName, setBillerFirstName] = useState('');
-    const [billerLastName, setBillerLastName] = useState('');
-    const [billerEmail, setBillerEmail] = useState('');
+
 
     const [rows, setRows] = React.useState(() => {
 

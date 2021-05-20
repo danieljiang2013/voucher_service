@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
 import { Grid } from '@material-ui/core'
 import Axios from 'axios';
@@ -100,7 +100,10 @@ function App() {
 
       <Route path="/billerInfo">
 
-        <BillerInfoForm user={user} token={token}></BillerInfoForm>
+        {token !== "" ? <BillerInfoForm user={user} token={token}></BillerInfoForm> :
+          <div>please sign in:
+             <Link to="/login">SignIn</Link></div>}
+
       </Route>
 
       <Route path="/personalInfo">
