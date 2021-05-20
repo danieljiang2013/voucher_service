@@ -1,15 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Button from '@material-ui/core/Button';
 
-function NavBar() {
+function NavBar(token, logout) {
+
     return (
         <ul>
             <li>
                 <Link to="/">Home</Link>
             </li>
-            <li>
-                <Link to="/billerInfo">BillerInfo</Link>
-            </li>
+            {token ?
+                <li>
+                    <Link to="/billerInfo">BillerInfo</Link>
+                </li> : <></>}
+
             <li>
                 <Link to="/personalInfo">PersonInfo</Link>
             </li>
@@ -20,7 +24,9 @@ function NavBar() {
             <li>
                 <Link to="/SignUp">SignUp</Link>
             </li>
+            <Button onClick={logout} variant="filled">Logout</Button>
         </ul>
+
     );
 }
 

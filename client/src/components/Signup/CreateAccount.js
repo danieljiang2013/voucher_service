@@ -16,39 +16,39 @@ import NavBar from '../Home/Navbar'
 import axios from 'axios';
 
 function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+    return (
+        <Typography variant="body2" color="textSecondary" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://material-ui.com/">
+                Your Website
       </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
 }
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
 }));
 
-export default function SignUp({storeToken}) {
+export default function SignUp({ storeToken }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -76,122 +76,121 @@ export default function SignUp({storeToken}) {
     const onphoneChange = (e) => {
         setphone(e.target.value);
     }
-    const handleClick= () => {
-        axios.post('http://localhost:8000/api/user/signup',{email:email, password:password,firstName:fname,lastName:lname,phoneNumber:phone})
-             .then(function(response){
-              storeToken.call(this, response.data.token);
-              console.log(response);
-             })
-             .catch(function(error){
-              console.log(error);
-             })
-      }
-  const classes = useStyles();
+    const handleClick = () => {
+        axios.post('api/user/signup', { email: email, password: password, firstName: fname, lastName: lname, phoneNumber: phone })
+            .then(function (response) {
+                storeToken.call(this, response.data.token);
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+    const classes = useStyles();
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-      <NavBar />
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+                <NavBar />
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign up
         </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                onChange={onfnameChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                onChange={onlnameChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={onEmailChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={onPasswordChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="phone"
-                label="Phone Number"
-                type="phone"
-                id="phone"
-                onChange={onphoneChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleClick}
-          >
-            Sign Up
+                <form className={classes.form} noValidate>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                autoComplete="fname"
+                                name="firstName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="firstName"
+                                label="First Name"
+                                autoFocus
+                                onChange={onfnameChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="lastName"
+                                label="Last Name"
+                                name="lastName"
+                                autoComplete="lname"
+                                onChange={onlnameChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                onChange={onEmailChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                onChange={onPasswordChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="phone"
+                                label="Phone Number"
+                                type="phone"
+                                id="phone"
+                                onChange={onphoneChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControlLabel
+                                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                label="I want to receive inspiration, marketing promotions and updates via email."
+                            />
+                        </Grid>
+                    </Grid>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={handleClick}
+                    >
+                        Sign Up
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
+                    <Grid container justify="flex-end">
+                        <Grid item>
+                            <Link href="#" variant="body2">
+                                Already have an account? Sign in
               </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
-  );
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+            <Box mt={5}>
+                <Copyright />
+            </Box>
+        </Container>
+    );
 }

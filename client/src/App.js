@@ -39,6 +39,7 @@ function App() {
 
   const logout = (() => {
 
+    console.log("logging out")
     localStorage.removeItem('user');
     localStorage.removeItem('token');
 
@@ -90,7 +91,7 @@ function App() {
     <Router>
 
       <Route exact path="/">
-        <Home />
+        <Home token={token} logout={logout()} />
       </Route>
       <Route path="/login">
         <LoginForm storeToken={storeToken}></LoginForm>

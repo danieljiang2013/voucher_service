@@ -133,10 +133,10 @@ export default function PersonalInfoForm({ token, user, storeToken }) {
                 id="lastName"
                 value={lname}
                 name="lastName"
-
                 onChange={onlnameChange}
               />
             </Grid>
+
             <Grid item xs={12}>
               Old Password
               <TextField
@@ -147,7 +147,7 @@ export default function PersonalInfoForm({ token, user, storeToken }) {
                 value={oldpassword}
                 type="password"
                 id="oldpassword"
-                autoComplete="old-password"
+
                 onChange={onoldPasswordChange}
               />
             </Grid>
