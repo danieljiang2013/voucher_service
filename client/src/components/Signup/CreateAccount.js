@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateAccount({ storeToken ,token,logout}) {
+function CreateAccount({ storeToken ,token,logout,history}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -84,7 +84,7 @@ export default function CreateAccount({ storeToken ,token,logout}) {
             .then((response) => {
                 storeToken(response.data.token);
                 setStatusBase({ msg: "Signup successful!", key: Math.random() });
-                console.log("wat?")
+                setTimeout(()=>{history.push('/')}, 1000);
                 console.log(response);
             })
             .catch((error) =>{
@@ -196,3 +196,5 @@ export default function CreateAccount({ storeToken ,token,logout}) {
         </Container>
     );
 }
+
+export default withRouter(CreateAccount);
