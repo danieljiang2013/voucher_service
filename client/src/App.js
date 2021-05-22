@@ -27,6 +27,11 @@ class App extends Component{
     this.setState({token:newtoken});
   }
 
+  storeUser = (newuser) => {
+    localStorage.setItem('user', newuser);
+    this.setState({user:newuser});
+  }
+
 
   logout = (() => {
 
@@ -105,7 +110,7 @@ class App extends Component{
 
       <Route exact path="/personalInfo">
 
-        {this.state.token !== "" ? <PersonalInfoForm user={this.state.user} token={this.state.token} storeToken={this.storeToken} logout={this.logout}></PersonalInfoForm> :
+        {this.state.token !== "" ? <PersonalInfoForm user={this.state.user} token={this.state.token} storeToken={this.storeToken} logout={this.logout} storeuser={this.storeUser}></PersonalInfoForm> :
           <LoginForm storeToken={this.storeToken} token={this.state.token} logout={this.logout} ></LoginForm>}
       </Route>
       </Switch>
