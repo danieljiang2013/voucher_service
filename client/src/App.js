@@ -1,5 +1,6 @@
+import { Component } from 'react';
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 import { Grid } from '@material-ui/core'
 import Axios from 'axios';
@@ -8,64 +9,61 @@ import Home from './components/Home/Home';
 import CreateAccount from './components/Signup/CreateAccount'
 import BillerInfoForm from './components/UpdateInfo/BillerInfoForm';
 import PersonalInfoForm from './components/UpdatePersonalInfo/PersonalInfoForm';
-function App() {
+class App extends Component{
+  constructor(props) { super(props); 
+  
+  this.state={
+    token:localStorage.getItem('token')?localStorage.getItem('token'):'',
+    user:localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):''
+  }}
 
-  const [token, setToken] = useState(() => {
 
-    const storedToken = localStorage.getItem('token');
-
-    if (storedToken) {
-      return storedToken;
-    }
-    return '';
-
-  })
-
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      return JSON.parse(storedUser);
-    }
-    return {};
-
-  })
+    
+  
 
   //stores jwt token in localStorage and sets it in the state
-  const storeToken = (newtoken) => {
+  storeToken = (newtoken) => {
     localStorage.setItem('token', newtoken);
-    setToken(newtoken);
+    this.setState({token:newtoken});
+  }
+
+  storeUser = (newuser) => {
+    localStorage.setItem('user', newuser);
+    this.setState({user:newuser});
   }
 
 
-  const logout = (() => {
+  logout = (() => {
 
     console.log("logging out")
     localStorage.removeItem('user');
     localStorage.removeItem('token');
 
-    if (token != '') {
-      setToken('');
+    if (this.state.token != '') {
+      this.setState({token:''});
     }
-    if (JSON.stringify(user) != JSON.stringify({})) {
-      setUser({});
+    if (JSON.stringify(this.state.user) != JSON.stringify({})) {
+      this.setState({user:{}});
+
     }
+    
 
   });
-
-  useEffect(() => {
+ 
+  componentDidUpdate() {
     console.log("useffect:");
     //if not logged in
-    if (token === '') {
+    if (this.state.token == '') {
       console.log("not logged in")
-      logout();
-      setUser({})
+      this.state.token='';
+      this.state.user={};
     }
 
     // otherwise retrieve user and set in state
     else {
       Axios.get('api/user/get', {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${this.state.token}`,
         },
       })
         .then((res) => {
@@ -73,47 +71,52 @@ function App() {
           console.log("logged in user:", localStorage.getItem('user'))
           if (userString !== JSON.stringify(localStorage.getItem('user'))) {
             localStorage.setItem('user', userString)
-            setUser(res.data)
-            console.log("set new user:", user);
+            this.state.user=res.data;
+            console.log("set new user:", this.state.user);
           }
         })
         .catch(() => {
-          logout();
+          this.state.token='';
+          this.state.user={};
         })
     }
 
-  }, [token]);
+  }
 
+
+  render() {
 
 
   return (
 
-    <Router>
+    <Router history={this.props.history} forceRefresh={true}>
+      <Switch>
 
       <Route exact path="/">
-        <Home token={token} logout={logout()} />
+        <Home token={this.state.token} logout={this.logout} />
       </Route>
-      <Route path="/login">
-        <LoginForm storeToken={storeToken}></LoginForm>
-      </Route>
-
-      <Route path="/signup"><CreateAccount></CreateAccount></Route>
-
-      <Route path="/billerInfo">
-
-        {token !== "" ? <BillerInfoForm user={user} token={token}></BillerInfoForm> :
-          <div>please sign in:
-             <Link to="/login">SignIn</Link></div>}
-
+      <Route exact path="/login">
+        <LoginForm storeToken={this.storeToken} token={this.state.token} logout={this.logout}  ></LoginForm>
       </Route>
 
-      <Route path="/personalInfo">
+      <Route exact path="/signup" ><CreateAccount storeToken={this.storeToken} token={this.state.token} logout={this.logout} ></CreateAccount></Route>
 
-        <PersonalInfoForm user={user} token={token}></PersonalInfoForm>
+      <Route exact path="/billerInfo">
+
+        {this.state.token !== "" ? <BillerInfoForm user={this.state.user} token={this.state.token} logout={this.logout} ></BillerInfoForm> :
+          <LoginForm storeToken={this.storeToken} token={this.state.token} logout={this.logout} ></LoginForm>}
+
       </Route>
+
+      <Route exact path="/personalInfo">
+
+        {this.state.token !== "" ? <PersonalInfoForm user={this.state.user} token={this.state.token} storeToken={this.storeToken} logout={this.logout} storeuser={this.storeUser}></PersonalInfoForm> :
+          <LoginForm storeToken={this.storeToken} token={this.state.token} logout={this.logout} ></LoginForm>}
+      </Route>
+      </Switch>
 
     </Router>
   )
-};
-
+}
+}
 export default App;

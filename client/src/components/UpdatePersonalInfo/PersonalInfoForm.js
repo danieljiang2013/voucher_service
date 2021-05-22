@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink ,withRouter } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import NavBar from '../Home/Navbar'
 import axios from 'axios';
+import Alert from "../Alert/Alert";
 
 function Copyright() {
   return (
@@ -50,16 +52,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-
-
-export default function PersonalInfoForm({ token, user, storeToken }) {
+function PersonalInfoForm({ token, user, storeToken ,logout,history,storeuser}) {
 
   const [oldpassword, setoldPassword] = useState();
   const [newpassword, setnewPassword] = useState('');
   const [fname, setfname] = useState(user.firstName);
   const [lname, setlname] = useState(user.lastName);
   const [phone, setphone] = useState(user.phoneNumber);
-
+  const [astatus, setStatusBase] = useState("");
 
 
 
@@ -87,26 +87,31 @@ export default function PersonalInfoForm({ token, user, storeToken }) {
   const handleClick = () => {
     axios.post('api/user/edituser', { email: user.email, oldpassword: oldpassword, newpassword: newpassword, firstName: fname, lastName: lname, phoneNumber: phone })
       .then((res) => {
-        storeToken.call(this, res.data.token);
+        setStatusBase({ msg: "Personal information edited successful!", key: Math.random() });
+        storeuser({email: user.email, password: newpassword, firstName: fname, lastName: lname, phoneNumber: phone });
+        setTimeout(()=>{history.push('/')}, 1000);
       }
       )
       .catch(function (error) {
+        setStatusBase({ msg: "Personal information edited failed.", key: Math.random() });
         console.log(error);
+        
       })
   }
 
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <NavBar />
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Personal Information
+    <div>
+    <Container component="main" maxWidth="lg">
+          <NavBar token={token} logout={logout}/>
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Personal Information
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -179,11 +184,9 @@ export default function PersonalInfoForm({ token, user, storeToken }) {
             </Grid>
           </Grid>
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
             onClick={handleClick}
           >
             Change
@@ -193,6 +196,11 @@ export default function PersonalInfoForm({ token, user, storeToken }) {
       <Box mt={5}>
         <Copyright />
       </Box>
+      
     </Container>
+    {astatus ? <Alert key={astatus.key} message={astatus.msg} /> : null}
+    </div>
   );
 }
+
+export default withRouter(PersonalInfoForm);

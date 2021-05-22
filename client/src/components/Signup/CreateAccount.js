@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink ,withRouter } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import NavBar from '../Home/Navbar'
 import axios from 'axios';
+import Alert from "../Alert/Alert";
 
 function Copyright() {
     return (
@@ -48,13 +50,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignUp({ storeToken }) {
+function CreateAccount({ storeToken ,token,logout,history}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fname, setfname] = useState('');
     const [lname, setlname] = useState('');
     const [phone, setphone] = useState('');
+    const [status, setStatusBase] = React.useState("");
 
     const onEmailChange = (e) => {
         setEmail(e.target.value);
@@ -78,21 +81,23 @@ export default function SignUp({ storeToken }) {
     }
     const handleClick = () => {
         axios.post('api/user/signup', { email: email, password: password, firstName: fname, lastName: lname, phoneNumber: phone })
-            .then(function (response) {
-                storeToken.call(this, response.data.token);
+            .then((response) => {
+                setStatusBase({ msg: "Signup successful!\n You need to login with your new account", key: Math.random() });
+                setTimeout(()=>{history.push('/login')}, 1000);
                 console.log(response);
             })
-            .catch(function (error) {
+            .catch((error) =>{
+              setStatusBase({ msg: "Signup failed!", key: Math.random() });
                 console.log(error);
             })
     }
     const classes = useStyles();
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="lg">
+          <NavBar token={token} logout={logout}/>
             <CssBaseline />
             <div className={classes.paper}>
-                <NavBar />
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
@@ -162,19 +167,13 @@ export default function SignUp({ storeToken }) {
                                 onChange={onphoneChange}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                label="I want to receive inspiration, marketing promotions and updates via email."
-                            />
-                        </Grid>
+
                     </Grid>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
+                
                         onClick={handleClick}
                     >
                         Sign Up
@@ -182,15 +181,19 @@ export default function SignUp({ storeToken }) {
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Link href="#" variant="body2">
-                                Already have an account? Sign in
+                                Already have an account? <NavLink to="/login">Sign in</NavLink>
               </Link>
                         </Grid>
                     </Grid>
                 </form>
+                {status ? <Alert key={status.key} message={status.msg} /> : null}
             </div>
             <Box mt={5}>
                 <Copyright />
             </Box>
+          
         </Container>
     );
 }
+
+export default withRouter(CreateAccount);
