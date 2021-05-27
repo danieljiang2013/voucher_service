@@ -93,7 +93,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
 
 
 function VoucherForm({ token, user ,logout,history}) {
-
+    const row=[];
 
 
     const [rows, setRows] = React.useState(() => {
@@ -111,11 +111,11 @@ function VoucherForm({ token, user ,logout,history}) {
             message=voucher.message;
             status=voucher.status;
             console.log(voucher.type)
-            
+            row.push(createData(type, delivery, date,message,status))
         }}
 
 
-        return [createData(type, delivery, date,message,status)]
+        return row
 
 
     });
@@ -140,18 +140,19 @@ function VoucherForm({ token, user ,logout,history}) {
         var type = ""
         var delivery = ""
         var date= ""
-        var comment= ""
+        var message= ""
         var status=""
         if(user.voucher){
         for(var voucher of user.voucher){
             type=voucher.type;
             delivery=voucher.delivery;
             date=voucher.date;
-            comment=voucher.comment;
+            message=voucher.message;
             status=voucher.status;
-            console.log(voucher.type)
-            setRows([createData(type, delivery, date,comment,status)])
+            console.log(user)
+            row.push(createData(type, delivery, date,comment,status))
         }
+        setRows(row);
 
     }
 
@@ -209,16 +210,9 @@ function VoucherForm({ token, user ,logout,history}) {
             return row;
         });
         setRows(newRows);
-        console.log("???")
-        Axios.post('api/user/updatevoucher', {id:user._id})
-            .then((res) => {
-                setStatusBase({ msg: "Update biller info successfully!", key: Math.random() });
-                setTimeout(()=>{history.push('/')}, 1500);
-            })
-            .catch((err) => {
-               
-                console.error(err);
-            })
+        console.log(id)
+    
+        
         setPrevious(state => {
             delete state[id];
             return state;
@@ -254,7 +248,7 @@ function VoucherForm({ token, user ,logout,history}) {
     }
 
     const handleClick = () => {
-        Axios.post('api/user/addvoucher', {id:user._id, type: type, delivery: delivery, date: selectedDate, comment: comment })
+        Axios.post('api/user/addvoucher', {id:user._id, type: type, delivery: delivery, date: selectedDate, message: comment })
             .then((response) => {
                 setStatusBase({ msg: "Adding voucher successfully", key: Math.random() });
                 setTimeout(()=>{history.push('/')}, 1000);
@@ -264,6 +258,8 @@ function VoucherForm({ token, user ,logout,history}) {
               setStatusBase({ msg: "Adding voucher failed!", key: Math.random() });
                 console.log(error);
             })
+            row.push(createData(type, delivery, selectedDate,comment,"open"))
+            setRows(row)
     }
 
 

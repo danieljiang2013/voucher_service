@@ -308,14 +308,14 @@ const addvoucher =(req,res) =>{
         console.log("wah");
         return;
     }
-    const voucher = {voucher:{
+    const voucher = {
         type: req.body.type,
         delivery: req.body.delivery,
         date: req.body.date,
         message:req.body.message,
         status:"open"
     }
-}
+
     console.log("id=", req.body);
     const id = req.body.id;
 
@@ -326,7 +326,7 @@ const addvoucher =(req,res) =>{
             res.send("failed to find user");
         }
         else {
-            userModel.updateOne({ _id: id },voucher, (err, result) => {
+            userModel.updateOne({ _id: id },{$push:{"voucher":voucher}}, (err, result) => {
                 if (err) {
                     console.log("User was not updated successfully");
                     console.error(err);
