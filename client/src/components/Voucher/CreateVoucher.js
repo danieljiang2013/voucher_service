@@ -93,9 +93,9 @@ const CustomTableCell = ({ row, name, onChange }) => {
 
 
 
-function VoucherForm({ token, user ,logout,history}) {
+function VoucherForm({ storeToken,token, user ,logout,history}) {
     const row=[];
-
+    var count=0;
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'type', headerName: 'Service Type', width: 130 },
@@ -125,8 +125,8 @@ function VoucherForm({ token, user ,logout,history}) {
             console.log(voucher.type)
             row.push(createData(id,type, delivery, date,message,status))
         }}
-
-
+        count=id;
+        
         return row
 
 
@@ -193,6 +193,8 @@ function VoucherForm({ token, user ,logout,history}) {
     const handleClick = () => {
         Axios.post('api/user/addvoucher', {id:user._id, type: type, delivery: delivery, date: selectedDate, message: comment })
             .then((response) => {
+                logout();
+                storeToken.call(this, token);
                 setStatusBase({ msg: "Adding voucher successfully", key: Math.random() });
                 setTimeout(()=>{history.push('/')}, 1000);
                 console.log(response);
@@ -201,7 +203,8 @@ function VoucherForm({ token, user ,logout,history}) {
               setStatusBase({ msg: "Adding voucher failed!", key: Math.random() });
                 console.log(error);
             })
-            
+            setRows( row.push(createData(count+1,type, delivery, selectedDate,comment,"open")))
+            window.location.reload();
     }
 
     const handleClick2 = () => {
@@ -215,6 +218,7 @@ function VoucherForm({ token, user ,logout,history}) {
               setStatusBase({ msg: "cancel voucher failed!", key: Math.random() });
                 console.log(error);
             })
+            
             
     }
 
