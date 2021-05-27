@@ -20,7 +20,7 @@ import Alert from "../Alert/Alert";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {'Copyright © Group12'}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{' '}
